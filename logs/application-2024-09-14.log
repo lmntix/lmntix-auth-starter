@@ -1,7 +1,0 @@
-{"method":"GET","url":"/","status":200,"content_length":"-","response_time":"0ms","body":"","level":"http","timestamp":"2024-09-14T04:25:18.561Z"}
-{"method":"GET","url":"/login","status":200,"content_length":"-","response_time":"0ms","body":"","level":"http","timestamp":"2024-09-14T04:25:28.648Z"}
-{"method":"GET","url":"/login","status":200,"content_length":"-","response_time":"0ms","body":"","level":"http","timestamp":"2024-09-14T04:25:28.986Z"}
-{"method":"GET","url":"/forgot-password","status":200,"content_length":"-","response_time":"0ms","body":"","level":"http","timestamp":"2024-09-14T04:27:10.106Z"}
-{"method":"GET","url":"/forgot-password","status":200,"content_length":"-","response_time":"0ms","body":"","level":"http","timestamp":"2024-09-14T04:27:10.549Z"}
-{"method":"GET","url":"/forgot-password","status":200,"content_length":"-","response_time":"0ms","body":"","level":"http","timestamp":"2024-09-14T04:27:11.776Z"}
-{"method":"GET","url":"/forgot-password","status":200,"content_length":"-","response_time":"0ms","body":"","level":"http","timestamp":"2024-09-14T04:27:12.192Z"}
