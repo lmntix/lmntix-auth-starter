@@ -4,7 +4,7 @@ import { logRequest } from "./utils/logger";
 
 export async function middleware(request: NextRequest) {
   const startTime = Date.now();
-  let body = "";
+  let body = "[ src/middleware ] ";
 
   if (
     request.body &&
