@@ -22,7 +22,7 @@ function addLog(logEntry: LogEntry) {
   }
 
   // Send log to API for file writing
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   fetch(`${apiUrl}/api/writelog`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
