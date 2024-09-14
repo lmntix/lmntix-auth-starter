@@ -46,8 +46,8 @@ export default function PasswordResetEmail({
           <Text
             style={{ fontSize: "14px", color: "#6b7280", textAlign: "center" }}
           >
-            If you didn't request a password reset, you can safely ignore this
-            email.
+            If you didn&apos;t request a password reset, you can safely ignore
+            this email.
           </Text>
           <Text
             style={{ fontSize: "14px", color: "#6b7280", textAlign: "center" }}

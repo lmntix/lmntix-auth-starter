@@ -46,8 +46,8 @@ export default function VerificationEmail({
           <Text
             style={{ fontSize: "14px", color: "#6b7280", textAlign: "center" }}
           >
-            If the button doesn't work, you can also copy and paste this link
-            into your browser:
+            If the button doesn&apos;t work, you can also copy and paste this
+            link into your browser:
           </Text>
           <Text
             style={{
