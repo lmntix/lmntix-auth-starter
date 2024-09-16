@@ -1,31 +1,52 @@
-import { pgTable, uuid, text, timestamp, boolean } from "drizzle-orm/pg-core";
+import {
+  uuid,
+  text,
+  timestamp,
+  pgTable,
+  boolean,
+  integer,
+} from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
-  email: text("email").notNull().unique(),
+  email: text("email").unique().notNull(),
   password: text("password").notNull(),
-  emailVerified: boolean("email_verified").default(false).notNull(),
+  isEmailVerified: boolean("is_email_verified").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const verificationCodes = pgTable("verification_codes", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  code: text("code").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const passwordResetTokens = pgTable("password_reset_tokens", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  token: text("token").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const sessions = pgTable("sessions", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id")
-    .notNull()
-    .references(() => users.id),
-  token: text("token").notNull().unique(),
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  token: text("token").unique().notNull(),
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const verificationTokens = pgTable("verification_tokens", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id")
-    .notNull()
-    .references(() => users.id),
-  token: text("token").notNull().unique(),
-  type: text("type").notNull(), // 'email_verification' or 'password_reset'
-  expiresAt: timestamp("expires_at").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+export type User = typeof users.$inferSelect;
+export type Session = typeof sessions.$inferSelect;
+export type VerificationCode = typeof verificationCodes.$inferSelect;
+export type PasswordResetToken = typeof passwordResetTokens.$inferSelect;

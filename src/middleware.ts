@@ -1,28 +1,54 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { logRequest } from "./utils/logger";
 
 export async function middleware(request: NextRequest) {
-  const startTime = Date.now();
-  let body = "[ src/middleware ] ";
+  const token = request.cookies.get("token")?.value;
+  const path = request.nextUrl.pathname;
 
-  if (
-    request.body &&
-    request.headers.get("content-type")?.includes("application/json")
-  ) {
-    try {
-      const clonedReq = request.clone();
-      body = await clonedReq.text();
-    } catch (error) {
-      console.error("Failed to read request body in middleware:", error);
+  if (path.startsWith("/dashboard") || path.startsWith("/settings")) {
+    if (!token) {
+      return NextResponse.redirect(new URL("/auth/signin", request.url));
+    }
+
+    const res = await fetch(`${request.nextUrl.origin}/api/auth/session`, {
+      headers: {
+        Cookie: `token=${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      return NextResponse.redirect(new URL("/auth/signin", request.url));
+    }
+
+    const { user } = await res.json();
+
+    if (!user.isEmailVerified) {
+      return NextResponse.redirect(new URL("/auth/verify-email", request.url));
     }
   }
 
-  const response = NextResponse.next();
-  await logRequest(request, response, startTime, body);
-  return response;
+  if (path.startsWith("/auth") && token) {
+    const res = await fetch(`${request.nextUrl.origin}/api/auth/session`, {
+      headers: {
+        Cookie: `token=${token}`,
+      },
+    });
+
+    if (res.ok) {
+      const { user } = await res.json();
+      if (user.isEmailVerified) {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+      } else if (path !== "/auth/verify-email") {
+        return NextResponse.redirect(
+          new URL("/auth/verify-email", request.url)
+        );
+      }
+    }
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: "/:path*",
+  matcher: ["/dashboard/:path*", "/settings/:path*", "/auth/:path*"],
 };
